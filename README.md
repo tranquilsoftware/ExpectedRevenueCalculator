@@ -22,21 +22,14 @@ A Python tool for projecting and visualizing revenue growth based on different c
    cd ExpectedRevenueCalculator
    ```
 
-2. Create and activate a virtual environment (recommended):
-   ```bash
-   python -m venv venv
-   .\venv\Scripts\activate  # On Windows
-   source venv/bin/activate  # On macOS/Linux
-   ```
-
-3. Install dependencies:
+2. Install dependencies:
    ```bash
    pip install -r requirements.txt
    ```
 
 ## Configuration
 
-1. Copy `.env.example` to `.env` (if available) or create a new `.env` file with:
+1. Create a new `.env` file with:
    ```
    SETUP_FEE=2249
    MONTHLY_HOSTING_FEE=29.95
@@ -67,6 +60,7 @@ Modify the `scenarios` dictionary in `main.py` to change the customer acquisitio
 scenarios = {
     "2 customers per month": 2,
     "3 customers per month": 3,
+    "6 customers per month": 6,
     # Add or modify scenarios as needed
 }
 ```
