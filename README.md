@@ -1,13 +1,15 @@
 # Expected Revenue Calculator
 
-A Python tool for projecting and visualizing revenue growth based on different customer acquisition scenarios.
+A comprehensive Python tool for projecting and visualizing revenue growth based on different customer acquisition scenarios, including various revenue streams and one-time fees.
 
 ## Features
 
-- Multiple customer acquisition scenarios (2, 3, 4, or 6 customers per month)
-- Dual-axis visualizations showing both revenue and customer growth
-- Detailed Excel reports with auto-adjusted column widths
-- Environment variable configuration for sensitive data
+- Multiple customer acquisition scenarios (1-6 customers per month)
+- Detailed revenue breakdown by stream (Hosting, Premium, Web Dev Care, Analytics, SEO)
+- Interactive visualizations with dual-axis charts
+- Comprehensive Excel reports with auto-adjusted column widths
+- Support for both recurring and one-time revenue streams
+- Configurable probabilities for different service up-sells
 
 ## Prerequisites
 
@@ -27,16 +29,38 @@ A Python tool for projecting and visualizing revenue growth based on different c
    pip install -r requirements.txt
    ```
 
+## Project Structure
+
+- `main.py`: Main script to run the revenue calculator
+- `revenue_calculator.py`: Core revenue calculation logic
+- `generate_charts.py`: Visualization and chart generation
+- `excel.py`: Excel report generation
+- `hidden_costs.py`: Configuration for pricing, probabilities, and revenue streams
+- `output/`: Directory containing generated charts and reports
+
 ## Configuration
 
-1. Create a new `.env` file with:
-   ```
-   SETUP_FEE=2249
-   MONTHLY_HOSTING_FEE=29.95
-   MONTHS_TO_CALCULATE=36
-   ```
+### Revenue Streams
 
-2. Modify the values in `.env` as needed for your scenario.
+Modify `hidden_costs.py` to adjust:
+- Base and premium hosting fees
+- Setup fees
+- Service probabilities and pricing
+- Revenue stream configurations
+
+### Scenarios
+
+Modify the `scenarios` dictionary in `main.py` to change the customer acquisition rates:
+
+```python
+scenarios = {
+    "1 customer per month": 1,
+    "2 customers per month": 2,
+    "3 customers per month": 3,
+    "4 customers per month": 4,
+    "6 customers per month": 6
+}
+```
 
 ## Usage
 
@@ -47,31 +71,29 @@ python main.py
 
 ### Output Files
 
-- `total_revenue_growth_chart.png`: Chart showing total revenue growth over time
-- `monthly_hosting_revenue_chart.png`: Chart showing monthly hosting revenue and customer growth
-- `customer_revenue_breakdown.xlsx`: Excel file with detailed revenue breakdown by scenario
+- `output/` directory will contain:
+  - `revenue_breakdown_*.png`: Individual revenue breakdown charts for each scenario
+  - `revenue_comparison.png`: Comparison of monthly revenue across all scenarios
+  - `cumulative_revenue_projection.png`: Cumulative revenue projection by scenario
+  - `customer_revenue_breakdown.xlsx`: Excel file with detailed revenue breakdown by scenario
 
 ## Customization
 
-### Scenarios
-Modify the `scenarios` dictionary in `main.py` to change the customer acquisition rates:
-
-```python
-scenarios = {
-    "2 customers per month": 2,
-    "3 customers per month": 3,
-    "6 customers per month": 6,
-    # Add or modify scenarios as needed
-}
-```
-
 ### Chart Styling
-Adjust the chart appearance by modifying the plotting code in `main.py`:
-- Figure size
+
+Modify `generate_charts.py` to adjust:
+- Figure sizes and layouts
+- Color schemes
+- Line styles and markers
+- Axis formatting and labels
+- Legend position and styling
+
+### Revenue Streams
+
+Update `REVENUE_STREAMS` in `hidden_costs.py` to add or modify revenue streams, including:
+- Display names
 - Colors
-- Line styles
-- Grid opacity
-- Legend position
+- Associated revenue calculations
 
 ## Dependencies
 
@@ -79,6 +101,7 @@ Adjust the chart appearance by modifying the plotting code in `main.py`:
 - matplotlib: Data visualization
 - openpyxl: Excel file handling
 - python-dotenv: Environment variable management
+- numpy: Numerical operations
 
 ## License
 

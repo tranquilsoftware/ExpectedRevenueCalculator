@@ -2,7 +2,10 @@
 .idea/
 .venv/
 *.iml
+*.pyc
 *.xml
+*.png
+*.xlsx
 
 # private service costs
 .env
