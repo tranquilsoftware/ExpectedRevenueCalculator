@@ -112,7 +112,7 @@ The tool generates:
 ### Modifying Revenue Streams
 
 Update the `CURRENT_MODEL` configuration in `config.py` to:
-- Add/remove hosting plans
+- Add/remove plans
 - Adjust pricing and probabilities
 - Define new add-ons and services
 

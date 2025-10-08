@@ -16,7 +16,7 @@ class PlanConfig(TypedDict):
 
 # Web Design Development Business Model
 WEB_DESIGN_MODEL = {
-    'hosting_plans': [
+    'plans': [
         {
             'name': 'basic',
             'price': 29.95,
@@ -88,7 +88,7 @@ WEB_DESIGN_MODEL = {
 
 # Buddy Business Model
 BUDDY_MODEL = {
-    'hosting_plans': [
+    'plans': [
         {
             'name': 'basic',
             'price': 39.00,
@@ -130,12 +130,12 @@ BUDDY_MODEL = {
 CURRENT_MODEL = BUDDY_MODEL        # Buddy Business Model
 
 # Extract hosting plans and addons for the selected model
-HOSTING_PLANS = CURRENT_MODEL['hosting_plans']
+PLANS = CURRENT_MODEL['plans']
 ADDONS = CURRENT_MODEL['addons']
 
 # Verify that the selected model's hosting plan probabilities sum to 1.0
 try:
-    TOTAL_PROB = sum(plan['probability'] for plan in HOSTING_PLANS)
+    TOTAL_PROB = sum(plan['probability'] for plan in PLANS)
     if not (0.99 <= TOTAL_PROB <= 1.01):  # Allow for small floating point errors
         raise ValueError(f"Hosting plan probabilities must sum to 1.0, got {TOTAL_PROB}")
 except Exception as e:
@@ -157,8 +157,8 @@ def get_revenue_streams() -> Dict[str, Dict[str, Any]]:
     """
     revenue_streams = {}
     
-    # Add hosting plans
-    for plan in HOSTING_PLANS:
+    # Add plans
+    for plan in PLANS:
         revenue_streams[plan['display_name']] = {
             'color': plan['color'],
             'display_name': f"{plan['display_name']} (${plan['price']})",
@@ -196,7 +196,7 @@ __all__ = [
     'MONTHS_TO_CALCULATE',
     'ANNUAL_DOMAIN_COST',
     'MONTHLY_DOMAIN_COST',
-    'HOSTING_PLANS',
+    'PLANS',
     'ADDONS',
     'CURRENT_MODEL',
     'WEB_DESIGN_MODEL',

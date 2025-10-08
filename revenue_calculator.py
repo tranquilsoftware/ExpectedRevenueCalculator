@@ -7,7 +7,7 @@ import numpy as np
 from config import (
     SETUP_FEE,
     MONTHS_TO_CALCULATE,
-    HOSTING_PLANS,
+    PLANS,
     ADDONS,
     CURRENT_MODEL,
     REVENUE_STREAMS

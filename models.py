@@ -11,15 +11,15 @@ from config import (
     MONTHS_TO_CALCULATE,
     ANNUAL_DOMAIN_COST,
     MONTHLY_DOMAIN_COST,
-    HOSTING_PLANS,
+    PLANS,
     ADDONS,
     CURRENT_MODEL,
     get_revenue_streams,
     REVENUE_STREAMS
 )
 
-# Calculate base hosting fee from the first hosting plan
-BASE_MONTHLY_HOSTING_FEE = HOSTING_PLANS[0]['price'] if HOSTING_PLANS else 0.0
+# Calculate base hosting fee from the first plan
+BASE_MONTHLY_HOSTING_FEE = PLANS[0]['price'] if PLANS else 0.0
 
 # Export BASE_MONTHLY_HOSTING_FEE
 __all__ = [
@@ -34,8 +34,8 @@ __all__ = [
     'select_random_plan'
 ]
 
-# Premium hosting fee (if available)
-premium_plans = [p for p in HOSTING_PLANS if p.get('name') == 'premium' or p.get('name') == 'pro']
+# Premium plan fee (if available)
+premium_plans = [p for p in PLANS if p.get('name') == 'premium' or p.get('name') == 'pro']
 PREMIUM_MONTHLY_HOSTING_FEE = premium_plans[0]['price'] if premium_plans else 0
 
 # Get REVENUE_STREAMS from config
@@ -76,7 +76,7 @@ class ServiceNames:
     pass
 
 # Dynamically add service names based on the current model
-for plan in HOSTING_PLANS + ADDONS:
+for plan in PLANS + ADDONS:
     name = plan['name'].upper()
     display_name = plan['display_name']
     setattr(ServiceNames, name, display_name)
@@ -197,16 +197,16 @@ def get_upsell_description(upsells: CustomerUpsells) -> str:
 # For backward compatibility
 def select_random_plan() -> Tuple[float, str]:
     """
-    Randomly select a hosting plan based on probabilities.
+    Randomly select a plan based on probabilities.
     Returns a tuple of (monthly_price, plan_name)
     """
     rand = random.random()
     cumulative_prob = 0.0
     
-    for plan in HOSTING_PLANS:
+    for plan in PLANS:
         cumulative_prob += plan['probability']
         if rand < cumulative_prob:
             return plan['price'], plan['name'].capitalize()
     
     # Fallback to first plan if no plan was selected (shouldn't happen if probabilities sum to 1.0)
-    return HOSTING_PLANS[0]['price'], HOSTING_PLANS[0]['name'].capitalize()
+    return PLANS[0]['price'], PLANS[0]['name'].capitalize()
