@@ -1,15 +1,23 @@
 import pandas as pd
 from typing import Dict, List, Tuple
 from dataclasses import dataclass
-from typing import List, Dict, Any, Tuple
-import pandas as pd
 import numpy as np
-from hidden_costs import (
-    SETUP_FEE, BASE_MONTHLY_HOSTING_FEE, MONTHS_TO_CALCULATE,
-    generate_customer_upsells, CustomerUpsells, get_upsell_description,
-    PREMIUM_MONTHLY_HOSTING_FEE, WEB_DEV_CARE_PKG, EXTRA_PAGE_PRICE,
-    ANALYTICS_DASHBOARD_PRICE, SEO_UPDATE_PACKAGE_PRICE, SEO_ARTICLES_PACKAGE_PRICE,
-    REVENUE_STREAMS, UPSELL_PACKAGES
+
+# Import from config and hidden_costs
+from config import (
+    SETUP_FEE,
+    MONTHS_TO_CALCULATE,
+    HOSTING_PLANS,
+    ADDONS,
+    CURRENT_MODEL,
+    REVENUE_STREAMS
+)
+
+from models import (
+    BASE_MONTHLY_HOSTING_FEE,
+    generate_customer_upsells,
+    CustomerUpsells,
+    UPSELL_PACKAGES
 )
 
 @dataclass

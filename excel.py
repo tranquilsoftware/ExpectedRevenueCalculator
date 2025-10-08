@@ -5,7 +5,11 @@ import os
 
 class ExcelGenerator:
     def __init__(self, output_file: str = "customer_revenue_breakdown.xlsx"):
-        self.output_file = output_file
+        # Ensure output directory exists
+        os.makedirs('output', exist_ok=True)
+        # Set the output path to be in the output directory
+        # e.g. output generated excel file will be in output/customer_revenue_breakdown.xlsx
+        self.output_file = os.path.join('output', output_file)
 
     def generate_excel(self, data_frames: Dict[str, pd.DataFrame]) -> None:
         """Generate Excel file with multiple sheets for different scenarios"""
@@ -23,4 +27,4 @@ class ExcelGenerator:
                     ) + 2
                     worksheet.column_dimensions[get_column_letter(i)].width = min(max_length, 30)
         
-        print(f"\nExcel file generated: {self.output_file}")
+        print(f"\nExcel file generated: {os.path.abspath(self.output_file)}")

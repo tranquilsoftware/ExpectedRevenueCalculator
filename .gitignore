@@ -6,11 +6,3 @@
 *.xml
 *.png
 *.xlsx
-
-# private service costs
-.env
-
-# Output files
-customer_revenue_breakdown.xlsx
-total_revenue_growth_chart.png
-monthly_hosting_revenue_chart.png

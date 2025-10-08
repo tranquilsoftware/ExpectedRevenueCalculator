@@ -1,106 +1,134 @@
 # Expected Revenue Calculator
 
-A comprehensive Python tool for projecting and visualizing revenue growth based on different customer acquisition scenarios, including various revenue streams and one-time fees.
+A comprehensive Python tool for projecting and visualizing revenue growth based on different customer acquisition scenarios, including various revenue streams and one-time fees. The tool now features a modular design that allows for easy customization of business models and revenue streams.
 
-## Features
+## 🚀 Features
 
-- Multiple customer acquisition scenarios (1-6 customers per month)
-- Detailed revenue breakdown by stream (Hosting, Premium, Web Dev Care, Analytics, SEO)
-- Interactive visualizations with dual-axis charts
-- Comprehensive Excel reports with auto-adjusted column widths
-- Support for both recurring and one-time revenue streams
-- Configurable probabilities for different service up-sells
+- **Modular Business Models**: Easily switch between different business models
+- **Customizable Revenue Streams**: Define your own hosting plans, add-ons, and pricing
+- **Flexible Configuration**: Adjust probabilities, pricing, and service offerings
+- **Multiple Scenarios**: Compare different customer acquisition rates (1-6+ customers/month)
+- **Detailed Visualizations**: Interactive charts with revenue breakdowns
+- **Comprehensive Reports**: Excel exports with detailed financial projections
+- **Type Hints**: Full type support for better code maintainability
 
-## Prerequisites
+## 🛠️ Project Structure
 
-- Python 3.7+
-- pip (Python package manager)
+- `main.py`: Main entry point for the application
+- `config.py`: Central configuration and model selection
+- `models.py`: Core business logic and data models
+  - `UpsellPackage`: Represents a sellable package with pricing and type
+  - `CustomerUpsells`: Tracks customer purchases and calculates revenue
+  - `ServiceNames`: Centralized service name definitions
+- `revenue_calculator.py`: Handles revenue projections and calculations
+- `generate_charts.py`: Visualization and chart generation
+- `excel.py`: Excel report generation
+- `output/`: Generated reports and charts
 
-## Installation
+## ⚙️ Configuration
 
-1. Clone the repository:
+### Business Models
+
+Edit `config.py` to define your business model:
+
+```python
+# Example Web Design Business Model
+WEB_DESIGN_MODEL = {
+    'hosting_plans': [
+        {
+            'name': 'basic',
+            'price': 29.95,
+            'type': 'recurring',
+            'display_name': 'Base Hosting',
+            'color': '#1f77b4',
+            'probability': 0.85
+        },
+        # ... more plans
+    ],
+    'addons': [
+        {
+            'name': 'web_dev_care',
+            'price': 247.00,
+            'type': 'recurring',
+            'display_name': 'Web Dev Care',
+            'color': '#2ca02c',
+            'probability': 0.10
+        },
+        # ... more addons
+    ]
+}
+
+# Select active model
+CURRENT_MODEL = WEB_DESIGN_MODEL
+```
+
+### Scenarios
+
+Modify `main.py` to adjust customer acquisition scenarios:
+
+```python
+scenarios = {
+    "1 customer/month": 1,
+    "2 customers/month": 2,
+    "3 customers/month": 3,
+    "4 customers/month": 4,
+    "6 customers/month": 6
+}
+```
+
+## 🚀 Getting Started
+
+1. **Clone the repository**
    ```bash
    git clone <repository-url>
    cd ExpectedRevenueCalculator
    ```
 
-2. Install dependencies:
+2. **Install dependencies**
    ```bash
    pip install -r requirements.txt
    ```
 
-## Project Structure
+3. **Run the calculator**
+   ```bash
+   python main.py
+   ```
 
-- `main.py`: Main script to run the revenue calculator
-- `revenue_calculator.py`: Core revenue calculation logic
-- `generate_charts.py`: Visualization and chart generation
-- `excel.py`: Excel report generation
-- `hidden_costs.py`: Configuration for pricing, probabilities, and revenue streams
-- `output/`: Directory containing generated charts and reports
+## 📊 Output
 
-## Configuration
+The tool generates:
+- Interactive charts in `output/` directory
+- Detailed Excel reports with revenue breakdowns
+- Visual comparisons across different scenarios
 
-### Revenue Streams
+## 🎨 Customization
 
-Modify `hidden_costs.py` to adjust:
-- Base and premium hosting fees
-- Setup fees
-- Service probabilities and pricing
-- Revenue stream configurations
+### Adding New Business Models
 
-### Scenarios
+1. Define your model in `config.py` following the existing structure
+2. Add it to the model selection in `config.py`
+3. The system will automatically handle the rest
 
-Modify the `scenarios` dictionary in `main.py` to change the customer acquisition rates:
+### Modifying Revenue Streams
 
-```python
-scenarios = {
-    "1 customer per month": 1,
-    "2 customers per month": 2,
-    "3 customers per month": 3,
-    "4 customers per month": 4,
-    "6 customers per month": 6
-}
-```
+Update the `CURRENT_MODEL` configuration in `config.py` to:
+- Add/remove hosting plans
+- Adjust pricing and probabilities
+- Define new add-ons and services
 
-## Usage
+## 📦 Dependencies
 
-Run the calculator:
-```bash
-python main.py
-```
-
-### Output Files
-
-- `output/` directory will contain:
-  - `revenue_breakdown_*.png`: Individual revenue breakdown charts for each scenario
-  - `revenue_comparison.png`: Comparison of monthly revenue across all scenarios
-  - `cumulative_revenue_projection.png`: Cumulative revenue projection by scenario
-  - `customer_revenue_breakdown.xlsx`: Excel file with detailed revenue breakdown by scenario
-
-## Customization
-
-### Chart Styling
-
-Modify `generate_charts.py` to adjust:
-- Figure sizes and layouts
-- Color schemes
-- Line styles and markers
-- Axis formatting and labels
-- Legend position and styling
-
-### Revenue Streams
-
-Update `REVENUE_STREAMS` in `hidden_costs.py` to add or modify revenue streams, including:
-- Display names
-- Colors
-- Associated revenue calculations
-
-## Dependencies
-
+- Python 3.7+
 - pandas: Data manipulation and Excel export
+- openpyxl: Excel file support
+- matplotlib: Chart generation
+- numpy: Numerical operations
+
+## 📝 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 - matplotlib: Data visualization
 - openpyxl: Excel file handling
-- python-dotenv: Environment variable management
 - numpy: Numerical operations
 
 ## License

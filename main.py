@@ -3,17 +3,12 @@ import os
 from revenue_calculator import RevenueCalculator
 from excel import ExcelGenerator
 from generate_charts import ChartGenerator
-from hidden_costs import MONTHS_TO_CALCULATE
+from config import MONTHS_TO_CALCULATE, SCENARIOS
 
 def main():
+    
     # Scenarios: number of customers acquired per month
-    scenarios = {
-        "1 customer per month": 1,
-        "2 customers per month": 2,
-        "3 customers per month": 3, 
-        "4 customers per month": 4,
-        "6 customers per month": 6,
-    }
+    scenarios = SCENARIOS
 
     # Calculate revenue for all scenarios
     dfs = {}

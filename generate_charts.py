@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import os
 from typing import Dict, List
 import pandas as pd
-from hidden_costs import REVENUE_STREAMS
+from models import REVENUE_STREAMS
 
 class ChartGenerator:
     @staticmethod
@@ -20,16 +20,31 @@ class ChartGenerator:
             )
         
         # Combined monthly revenue comparison chart
-        plt.figure(figsize=(14, 7))
-        for label, df in data_frames.items():
-            plt.plot(df['Month'], df['Total Monthly Revenue'], 
-                    label=f'{label} Revenue', linewidth=2)
+        plt.figure(figsize=(14, 8))
         
-        plt.xlabel('Month')
-        plt.ylabel('Total Monthly Revenue ($)')
-        plt.title('Monthly Revenue Comparison by Scenario')
-        plt.legend()
-        plt.grid(True, alpha=0.3)
+        # Plot each scenario with proper formatting
+        for label, df in data_frames.items():
+            plt.plot(
+                df['Month'], 
+                df['Total Monthly Revenue'],
+                label=f'{label} Revenue',
+                linewidth=2.5
+            )
+        
+        # Format the plot
+        plt.xlabel('Month', fontsize=12, labelpad=10)
+        plt.ylabel('Total Monthly Revenue', fontsize=12, labelpad=10)
+        plt.title('Monthly Revenue Comparison by Scenario', fontsize=14, pad=20)
+        
+        # Format y-axis to show full dollar amounts with comma separators
+        ax = plt.gca()
+        ax.yaxis.set_major_formatter('${x:,.0f}')
+        
+        # Rotate y-tick labels for better readability
+        plt.setp(ax.get_yticklabels(), rotation=45, ha='right')
+        
+        plt.legend(fontsize=10, framealpha=1, shadow=True)
+        plt.grid(True, linestyle='--', alpha=0.7)
         plt.tight_layout()
         plt.savefig('output/revenue_comparison.png', bbox_inches='tight', dpi=300)
         plt.close()
@@ -69,7 +84,8 @@ class ChartGenerator:
         output_path = os.path.join('output', 'cumulative_revenue_projection.png')
         plt.savefig(output_path, dpi=300, bbox_inches='tight')
         plt.close()
-        print(f"Saved cumulative revenue projection: {output_path}")
+        # Ensure forward slashes in the output message for consistency
+        print(f"Saved cumulative revenue projection: {output_path.replace(os.sep, '/')}")
 
     @staticmethod
     def _plot_revenue_breakdown(df: pd.DataFrame, title: str, filename: str) -> None:
