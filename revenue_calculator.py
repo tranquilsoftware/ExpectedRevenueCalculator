@@ -1,3 +1,4 @@
+import random
 import pandas as pd
 from typing import Dict, List, Tuple
 from dataclasses import dataclass
@@ -57,14 +58,36 @@ class RevenueCalculator:
         # Generate new customers and their upsells
         new_customers = []
         for _ in range(self.customers_per_month):
+            # Select a random plan for the customer
+            plan = random.choices(
+                PLANS,
+                weights=[p.get('probability', 1.0) for p in PLANS],
+                k=1
+            )[0]
+            
+            # Generate upsells for the customer
             upsells = generate_customer_upsells()
+            
+            # Calculate plan-specific revenue
+            plan_monthly_revenue = {}
+            plan_one_time_revenue = {}
+            
+            # Add the plan's monthly fee
+            plan_monthly_revenue[plan['name']] = plan['price']
+            
+            # Get all revenue from upsells
+            monthly_revenue = upsells.get_monthly_revenue()
+            one_time_revenue = upsells.get_one_time_revenue()
+            
+            # Add the customer with plan information
             new_customers.append({
                 'month_joined': month,
+                'plan': plan['name'],
                 'upsells': upsells,
                 'one_time_fee': upsells.calculate_one_time_fees(),
                 'monthly_upsell': upsells.calculate_monthly_upsell_total(),
-                'monthly_revenue': upsells.get_monthly_revenue(),
-                'one_time_revenue': upsells.get_one_time_revenue()
+                'monthly_revenue': {**plan_monthly_revenue, **monthly_revenue},
+                'one_time_revenue': one_time_revenue
             })
         
         # Add new customers to cohorts
@@ -82,17 +105,29 @@ class RevenueCalculator:
         total_monthly_revenue = base_hosting_revenue + monthly_upsell_revenue
         self.cumulative_hosting += total_monthly_revenue
         
-        # Initialize revenue tracking for each package type
+        # Initialize revenue tracking
         revenue_by_stream = {stream: 0.0 for stream in REVENUE_STREAMS}
+        plan_revenues = {plan['name']: 0.0 for plan in PLANS}
         
-        # Aggregate revenue across all customers by stream
+        # Track customers by plan
+        customers_by_plan = {plan['name']: 0 for plan in PLANS}
+        
+        # Aggregate revenue across all customers
         for customer in self.customer_cohorts:
-            # Add monthly revenue
+            # Count customers by plan
+            customer_plan = customer.get('plan', PLANS[0]['name'])
+            customers_by_plan[customer_plan] = customers_by_plan.get(customer_plan, 0) + 1
+            
+            # Add monthly revenue by stream
             for stream, amount in customer['monthly_revenue'].items():
                 if stream in revenue_by_stream:
                     revenue_by_stream[stream] += amount
+                
+                # If this is a plan's monthly fee, add it to the plan's revenue
+                if stream in plan_revenues:
+                    plan_revenues[stream] += amount
             
-            # Add one-time revenue (only for new customers)
+            # Add one-time revenue for new customers
             if customer['month_joined'] == month:
                 for stream, amount in customer['one_time_revenue'].items():
                     if stream in revenue_by_stream:
@@ -119,8 +154,17 @@ class RevenueCalculator:
         # Add package counts
         month_data.update(package_counts)
         
-        # Add revenue by stream
+        # Add revenue by stream (including plan-specific revenues)
         for stream, amount in revenue_by_stream.items():
             month_data[stream] = round(amount, 2)
+            
+        # Add plan-specific revenues (capitalized to match the expected column names)
+        for plan_name, amount in plan_revenues.items():
+            month_data[plan_name.capitalize()] = round(amount, 2)
+                
+        # Ensure all plan columns exist in the output, even if zero
+        for plan in PLANS:
+            if plan['name'] not in month_data:
+                month_data[plan['name']] = 0.0
         
         self.data.append(month_data)
