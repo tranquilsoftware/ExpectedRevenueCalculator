@@ -1,11 +1,9 @@
-import os
-import traceback
-import pandas as pd
 import matplotlib.pyplot as plt
 import os
 from typing import Dict, List
 import pandas as pd
 from models import REVENUE_STREAMS
+
 class ChartGenerator:
     @staticmethod
     def generate_revenue_charts(data_frames: Dict[str, pd.DataFrame]) -> None:
@@ -98,41 +96,18 @@ class ChartGenerator:
         df['Monthly One-Time Revenue'] = df['One-Time Revenue (Cumulative)'].diff().fillna(df['One-Time Revenue (Cumulative)'].iloc[0])
         
         # Get revenue columns and their colors from REVENUE_STREAMS
-        revenue_columns = [col for col in REVENUE_STREAMS.keys() if col in df.columns]
-        # print(f"\n=== Debug Info for {title} ===")
-        # print(f"Revenue columns to plot: {revenue_columns}")
-        # print("\nDataFrame columns:", df.columns.tolist())
-        
-        # Debug: Print data types and first few values of each revenue column
-        # for col in revenue_columns:
-        #     print(f"\nColumn: {col}")
-        #     print(f"Type: {df[col].dtype}")
-        #     print(f"First 5 values:\n{df[col].head()}")
-        #     print(f"Contains NaN: {df[col].isna().any()}")
-        
+        revenue_columns = list(REVENUE_STREAMS.keys())
         colors = [REVENUE_STREAMS[col]['color'] for col in revenue_columns]
-        labels = [REVENUE_STREAMS[col]['display_name'] for col in revenue_columns]
-        
-        # Debug: Check data for stackplot
-        # print("\nData being passed to stackplot:")
-        # print("Months:", df['Month'].tolist())
-        # for col in revenue_columns:
-        #     print(f"{col} values:", df[col].tolist())
         
         # Plot each revenue stream
         ax = plt.gca()
-        try:
-            ax.stackplot(
-                df['Month'],
-                [df[col] for col in revenue_columns],
-                labels=labels,
-                colors=colors,
-                alpha=0.7
-            )
-        except Exception as e:
-            print(f"\nError in stackplot: {str(e)}")
-            print("Stack trace:", traceback.format_exc())
-            raise
+        ax.stackplot(
+            df['Month'],
+            [df[col] for col in revenue_columns],
+            labels=[REVENUE_STREAMS[col]['display_name'] for col in revenue_columns],
+            colors=colors,
+            alpha=0.7
+        )
         
         # Add customer count on secondary y-axis
         ax2 = ax.twinx()

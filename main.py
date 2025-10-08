@@ -6,7 +6,7 @@ from generate_charts import ChartGenerator
 from config import MONTHS_TO_CALCULATE, SCENARIOS
 
 def main():
-    
+
     # Scenarios: number of customers acquired per month
     scenarios = SCENARIOS
 
