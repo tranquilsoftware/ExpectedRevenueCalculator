@@ -126,11 +126,4 @@ Update the `CURRENT_MODEL` configuration in `config.py` to:
 
 ## 📝 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-- matplotlib: Data visualization
-- openpyxl: Excel file handling
-- numpy: Numerical operations
-
-## License
-
-This project is for demonstration purposes. Please ensure you have the right to use and modify the code as needed for your specific use case.
+This project is licensed under the MIT License. Feel free to use, modify, and distribute as needed.
