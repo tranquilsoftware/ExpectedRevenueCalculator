@@ -122,12 +122,13 @@ BUDDY_MODEL = {
     ]
 }
 
+
 # =============================================
 # MODEL SELECTION
 # =============================================
 # Choose which business model to use by uncommenting one of the following lines:
 # CURRENT_MODEL = WEB_DESIGN_MODEL  # Web Design Development Business Model
-CURRENT_MODEL = BUDDY_MODEL        # Buddy Business Model
+CURRENT_MODEL = INSTANTLY_MODEL        # Buddy Business Model
 
 # Extract hosting plans and addons for the selected model
 PLANS = CURRENT_MODEL['plans']
@@ -149,6 +150,7 @@ SETUP_FEE = 2249
 MONTHS_TO_CALCULATE = 36
 ANNUAL_DOMAIN_COST = 150
 MONTHLY_DOMAIN_COST = (ANNUAL_DOMAIN_COST / 12)  # ~$12.50 per month
+CHURN_PERCENTAGE = 0.15  # % monthly churn rate (customers leaving per month)
 
 def get_revenue_streams() -> Dict[str, Dict[str, Any]]:
     """
@@ -188,6 +190,10 @@ SCENARIOS = {
     "4 customers per month": 4,
     "6 customers per month": 6,
     "10 customers per month": 10,
+    "25 customers per month": 25,
+    "50 customers per month": 50,
+    "100 customers per month": 100,
+    "150 customers per month": 150,
 }
 
 # Export all configuration values

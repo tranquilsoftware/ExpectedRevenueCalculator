@@ -14,6 +14,7 @@ from config import (
     PLANS,
     ADDONS,
     CURRENT_MODEL,
+    CHURN_PERCENTAGE,
     get_revenue_streams,
     REVENUE_STREAMS
 )

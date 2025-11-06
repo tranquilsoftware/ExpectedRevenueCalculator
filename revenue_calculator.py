@@ -11,7 +11,8 @@ from config import (
     PLANS,
     ADDONS,
     CURRENT_MODEL,
-    REVENUE_STREAMS
+    REVENUE_STREAMS,
+    CHURN_PERCENTAGE
 )
 
 from models import (
@@ -27,6 +28,7 @@ class RevenueMetrics:
     month: int
     total_customers: int
     new_customers: int
+    churned_customers: int
     one_time_revenue: float
     cumulative_one_time: float
     base_hosting_revenue: float
@@ -39,9 +41,10 @@ class RevenueMetrics:
 class RevenueCalculator:
     """Handles all revenue calculation logic"""
     
-    def __init__(self, customers_per_month: int, months: int = MONTHS_TO_CALCULATE):
+    def __init__(self, customers_per_month: int, months: int = MONTHS_TO_CALCULATE, churn_rate: float = CHURN_PERCENTAGE):
         self.customers_per_month = customers_per_month
         self.months = months
+        self.churn_rate = churn_rate
         self.customer_cohorts = []
         self.cumulative_one_time = 0
         self.cumulative_hosting = 0
@@ -53,8 +56,28 @@ class RevenueCalculator:
             self._process_month(month)
         return pd.DataFrame(self.data)
 
+    def _apply_churn(self, month: int) -> int:
+        """Apply churn to existing customer base"""
+        if len(self.customer_cohorts) == 0:
+            return 0
+        
+        # Calculate number of customers to churn
+        num_to_churn = int(len(self.customer_cohorts) * self.churn_rate)
+        
+        # Randomly remove customers
+        if num_to_churn > 0:
+            churned_indices = random.sample(range(len(self.customer_cohorts)), num_to_churn)
+            # Remove in reverse order to avoid index issues
+            for idx in sorted(churned_indices, reverse=True):
+                self.customer_cohorts.pop(idx)
+        
+        return num_to_churn
+
     def _process_month(self, month: int) -> None:
         """Process a single month's revenue calculations"""
+        # Apply churn first (customers leaving)
+        churned_count = self._apply_churn(month) if month > 1 else 0
+        
         # Generate new customers and their upsells
         new_customers = []
         for _ in range(self.customers_per_month):
@@ -144,6 +167,9 @@ class RevenueCalculator:
             "Month": month,
             "Total Customers": total_customers,
             "New Customers": len(new_customers),
+            "Churned Customers": churned_count,
+            "Net Customer Growth": len(new_customers) - churned_count,
+            "Churn Rate": round(self.churn_rate * 100, 2),
             "One-Time Revenue (Cumulative)": round(self.cumulative_one_time, 2),
             "Base Hosting Revenue": round(base_hosting_revenue, 2),
             "Upsell Revenue": round(monthly_upsell_revenue, 2),
